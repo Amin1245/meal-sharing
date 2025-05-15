@@ -3,29 +3,70 @@ import express from "express";
 import cors from "cors";
 import bodyParser from "body-parser";
 import knex from "./database_client.js";
-import nestedRouter from "./routers/nested.js";
 
 const app = express();
 app.use(cors());
 app.use(bodyParser.json());
 
-const apiRouter = express.Router();
-
-// You can delete this route once you add your own routes
-apiRouter.get("/", async (req, res) => {
-  const SHOW_TABLES_QUERY =
-    process.env.DB_CLIENT === "pg"
-      ? "SELECT * FROM pg_catalog.pg_tables;"
-      : "SHOW TABLES;";
-  const tables = await knex.raw(SHOW_TABLES_QUERY);
-  res.json({ tables });
+// Future meals
+app.get("/api/future-meals", async (req, res) => {
+  try {
+    const meals = await knex.raw("SELECT * FROM meal WHERE `when` > NOW()");
+    res.json(meals[0]);
+  } catch (err) {
+    res.status(500).json({ error: "Error fetching future meals" });
+  }
 });
 
-// This nested router example can also be replaced with your own sub-router
-apiRouter.use("/nested", nestedRouter);
+// Past meals
+app.get("/api/past-meals", async (req, res) => {
+  try {
+    const meals = await knex.raw("SELECT * FROM meal WHERE `when` < NOW()");
+    res.json(meals[0]);
+  } catch (err) {
+    res.status(500).json({ error: "Error fetching past meals" });
+  }
+});
 
-app.use("/api", apiRouter);
+//  All meals
+app.get("/api/all-meals", async (req, res) => {
+  try {
+    const meals = await knex.raw("SELECT * FROM meal ORDER BY id");
+    res.json(meals[0]);
+  } catch (err) {
+    res.status(500).json({ error: "Error fetching all meals" });
+  }
+});
 
+// First meal
+app.get("/api/first-meal", async (req, res) => {
+  try {
+    const meals = await knex.raw("SELECT * FROM meal ORDER BY id ASC LIMIT 1");
+    if (meals[0].length === 0) {
+      return res.status(404).json({ error: "No meals found" });
+    }
+    res.json(meals[0][0]);
+  } catch (err) {
+    res.status(500).json({ error: "Error fetching first meal" });
+  }
+});
+
+//  Last meal
+app.get("/api/last-meal", async (req, res) => {
+  try {
+    const meals = await knex.raw("SELECT * FROM meal ORDER BY id DESC LIMIT 1");
+    if (meals[0].length === 0) {
+      return res.status(404).json({ error: "No meals found" });
+    }
+    res.json(meals[0][0]);
+  } catch (err) {
+    res.status(500).json({ error: "Error fetching last meal" });
+  }
+});
+
+
+
+// Start server
 app.listen(process.env.PORT, () => {
   console.log(`API listening on port ${process.env.PORT}`);
 });
