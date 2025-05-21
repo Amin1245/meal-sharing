@@ -3,12 +3,14 @@ import express from "express";
 import cors from "cors";
 import bodyParser from "body-parser";
 import knex from "./database_client.js";
+import mealsRouter from "./routers/meals.js";
+import reservationsRouter from "./routers/reservations.js";
 
 const app = express();
 app.use(cors());
 app.use(bodyParser.json());
 
-// Future meals
+// Special routes (future/past/first/last meals)
 app.get("/api/future-meals", async (req, res) => {
   try {
     const meals = await knex.raw("SELECT * FROM meal WHERE `when` > NOW()");
@@ -18,7 +20,6 @@ app.get("/api/future-meals", async (req, res) => {
   }
 });
 
-// Past meals
 app.get("/api/past-meals", async (req, res) => {
   try {
     const meals = await knex.raw("SELECT * FROM meal WHERE `when` < NOW()");
@@ -28,7 +29,6 @@ app.get("/api/past-meals", async (req, res) => {
   }
 });
 
-//  All meals
 app.get("/api/all-meals", async (req, res) => {
   try {
     const meals = await knex.raw("SELECT * FROM meal ORDER BY id");
@@ -38,7 +38,6 @@ app.get("/api/all-meals", async (req, res) => {
   }
 });
 
-// First meal
 app.get("/api/first-meal", async (req, res) => {
   try {
     const meals = await knex.raw("SELECT * FROM meal ORDER BY id ASC LIMIT 1");
@@ -51,7 +50,6 @@ app.get("/api/first-meal", async (req, res) => {
   }
 });
 
-//  Last meal
 app.get("/api/last-meal", async (req, res) => {
   try {
     const meals = await knex.raw("SELECT * FROM meal ORDER BY id DESC LIMIT 1");
@@ -64,9 +62,11 @@ app.get("/api/last-meal", async (req, res) => {
   }
 });
 
+//  Mount the new routers here
+app.use("/api/meals", mealsRouter);
+app.use("/api/reservations", reservationsRouter);
 
-
-// Start server
+//Start server
 app.listen(process.env.PORT, () => {
   console.log(`API listening on port ${process.env.PORT}`);
 });
