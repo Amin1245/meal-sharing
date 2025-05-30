@@ -5,6 +5,9 @@ import bodyParser from "body-parser";
 import knex from "./database_client.js";
 import mealsRouter from "./routers/meals.js";
 import reservationsRouter from "./routers/reservations.js";
+import reviewsRouter from "./routers/reviews.js";
+
+
 
 const app = express();
 app.use(cors());
@@ -62,11 +65,12 @@ app.get("/api/last-meal", async (req, res) => {
   }
 });
 
-//  Mount the new routers here
+//  Mount routers
 app.use("/api/meals", mealsRouter);
 app.use("/api/reservations", reservationsRouter);
+app.use("/api/reviews", reviewsRouter);
 
-//Start server
+// Start server
 app.listen(process.env.PORT, () => {
   console.log(`API listening on port ${process.env.PORT}`);
 });
