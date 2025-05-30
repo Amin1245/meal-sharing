@@ -13,7 +13,7 @@ router.get("/", async (req, res) => {
   }
 });
 
-// GET /api/reviews/:id - Get a review by ID
+// Get /api/reviews/:id - Get a review by ID
 router.get("/:id", async (req, res) => {
   try {
     const review = await knex("review").where({ id: req.params.id }).first();

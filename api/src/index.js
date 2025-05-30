@@ -7,8 +7,6 @@ import mealsRouter from "./routers/meals.js";
 import reservationsRouter from "./routers/reservations.js";
 import reviewsRouter from "./routers/reviews.js";
 
-
-
 const app = express();
 app.use(cors());
 app.use(bodyParser.json());
