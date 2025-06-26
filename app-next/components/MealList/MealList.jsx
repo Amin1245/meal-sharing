@@ -7,7 +7,7 @@ const MealsList = () => {
   useEffect(() => {
     const fetchMeals = async () => {
       try {
-        const response = await fetch("http://localhost:3001/api/meals");
+        const response = await fetch("http://localhost:3001/api/meals"); 
         const data = await response.json();
         setMeals(data);
       } catch (error) {
@@ -16,7 +16,7 @@ const MealsList = () => {
     };
 
     fetchMeals();
-  }, []);
+  }, []); 
 
   return (
     <div>
@@ -33,3 +33,4 @@ const MealsList = () => {
 };
 
 export default MealsList;
+ 
