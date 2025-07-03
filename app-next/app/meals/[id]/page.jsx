@@ -1,15 +1,9 @@
-// app/meals/[id]/page.jsx
-"use client";
+"use client"; 
 
 import { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
 import Header from '../../../components/Header/Header';
 import Footer from '../../../components/Footer/footer';
-
-
-// تابع generateStaticParams حذف شد تا با "use client" تداخل نداشته باشد.
-// این یعنی صفحه در زمان اجرا (runtime) داده‌ها را واکشی می‌کند.
-
 
 const MealDetailPage = () => {
   const params = useParams();

@@ -1,4 +1,3 @@
-// app/meals/page.jsx
 "use client";
 
 import MealsList from '../../components/MealList/MealList';
