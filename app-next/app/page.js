@@ -1,7 +1,9 @@
-import HomePage from "@/components/HomePage/HomePage";
+    // app/page.js
+    import HomePage from '../components/HomePage/HomePage';
 
-export default function Home() {
-  return (
-    <HomePage />
-  );
-}
+    export default function Home() {
+      return (
+        <HomePage />
+      );
+    }
+    
