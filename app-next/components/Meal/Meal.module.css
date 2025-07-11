@@ -1,7 +1,66 @@
+/* components/Meal/Meal.module.css */
+
 .card {
-  border: 1px solid #ccc;
-  padding: 1rem;
-  border-radius: 12px;
-  box-shadow: 2px 2px 10px rgba(0,0,0,0.1);
-  background-color: #f9f9f9;
+  background-color: var(--background-medium);
+  border: 1px solid var(--border-color);
+  border-radius: 10px;
+  padding: 20px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 100%;
+}
+
+.card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
+}
+
+.mealImage {
+  width: 100%;
+  height: 180px;
+  object-fit: cover;
+  border-radius: 8px;
+  margin-bottom: 10px;
+}
+
+.card h3 {
+  color: var(--primary-color);
+  margin-top: 0;
+  font-size: 1.5em;
+}
+
+.card p {
+  font-size: 0.95em;
+  line-height: 1.6;
+  color: var(--text-on-medium-bg);
+  margin-bottom: 10px;
+}
+
+.card strong {
+  color: var(--text-on-medium-bg);
+}
+
+.viewDetailsButton {
+  display: block;
+  background-color: var(--button-primary-bg);
+  color: var(--text-light);
+  padding: 10px 15px;
+  border-radius: 6px;
+  text-decoration: none;
+  font-weight: bold;
+  transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.2s ease;
+  margin-top: 15px;
+  text-align: center;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.viewDetailsButton:hover {
+  background-color: var(--button-primary-hover);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 8px rgba(0,0,0,0.15);
 }

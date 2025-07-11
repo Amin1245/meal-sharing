@@ -1,6 +1,98 @@
+/* components/MealList/MealList.module.css */
+
+.container {
+  max-width: 1000px;
+  margin: 20px auto;
+  padding: 20px;
+  background-color: var(--background-light);
+  color: var(--text-dark);
+}
+
+.controls {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  margin-bottom: 30px;
+  align-items: center;
+  justify-content: center;
+  background-color: var(--background-dark);
+  padding: 15px;
+  border-radius: 8px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+}
+
+.searchForm {
+  display: flex;
+  gap: 10px;
+}
+
+.searchInput {
+  padding: 10px;
+  border: 1px solid var(--border-color);
+  border-radius: 5px;
+  font-size: 1em;
+  min-width: 200px;
+  background-color: white;
+  color: var(--text-dark);
+}
+
+.searchButton {
+  padding: 10px 15px;
+  background-color: var(--button-primary-bg);
+  color: var(--text-light);
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 1em;
+  transition: background-color 0.3s ease;
+}
+
+.searchButton:hover {
+  background-color: var(--button-primary-hover);
+}
+
+.sortControls {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+.sortSelect {
+  padding: 8px;
+  border: 1px solid var(--border-color);
+  border-radius: 5px;
+  font-size: 0.9em;
+  min-width: 120px;
+  background-color: white;
+  color: var(--text-dark);
+}
+
+.checkboxLabel {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 0.9em;
+  color: var(--text-dark);
+}
+
 .grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-  gap: 1rem;
-  margin-top: 1rem;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 25px;
+  margin-top: 20px;
+  justify-content: center;
+}
+
+@media (max-width: 768px) {
+  .controls {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  .searchForm, .sortControls {
+    width: 100%;
+    justify-content: center;
+  }
+  .searchInput {
+    width: calc(100% - 80px);
+  }
 }

@@ -9,7 +9,8 @@ router.get("/", async (req, res) => {
     const reservations = await knex("reservation").select("*");
     res.json(reservations);
   } catch (err) {
-    res.status(500).json({ error: "Error fetching reservations" });
+    console.error("Error fetching reservations:", err);
+    res.status(500).json({ error: err.message || "Error fetching reservations" });
   }
 });
 
@@ -23,17 +24,20 @@ router.get("/:id", async (req, res) => {
     }
     res.json(reservation);
   } catch (err) {
-    res.status(500).json({ error: "Error fetching reservation" });
+    console.error("Error fetching reservation by ID:", err);
+    res.status(500).json({ error: err.message || "Error fetching reservation" });
   }
 });
 
 // POST /api/reservations
 router.post("/", async (req, res) => {
   try {
-    const [newReservation] = await knex("reservation").insert(req.body);
-    res.status(201).json({ message: "Reservation created", id: newReservation });
+    console.log("Received reservation data:", req.body); 
+    const [newReservationId] = await knex("reservation").insert(req.body);
+    res.status(201).json({ message: "Reservation created", id: newReservationId });
   } catch (err) {
-    res.status(500).json({ error: "Error creating reservation" });
+    console.error("Error creating reservation:", err);
+    res.status(500).json({ error: err.message || "Error creating reservation" });
   }
 });
 
@@ -45,7 +49,8 @@ router.put("/:id", async (req, res) => {
     if (!updated) return res.status(404).json({ error: "Reservation not found" });
     res.json({ message: "Reservation updated" });
   } catch (err) {
-    res.status(500).json({ error: "Error updating reservation" });
+    console.error("Error updating reservation:", err);
+    res.status(500).json({ error: err.message || "Error updating reservation" });
   }
 });
 
@@ -57,7 +62,8 @@ router.delete("/:id", async (req, res) => {
     if (!deleted) return res.status(404).json({ error: "Reservation not found" });
     res.json({ message: "Reservation deleted" });
   } catch (err) {
-    res.status(500).json({ error: "Error deleting reservation" });
+    console.error("Error deleting reservation:", err);
+    res.status(500).json({ error: err.message || "Error deleting reservation" });
   }
 });
 
