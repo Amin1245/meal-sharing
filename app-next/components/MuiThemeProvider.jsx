@@ -1,4 +1,3 @@
-// components/MuiThemeProvider.jsx
 "use client";
 
 import { ThemeProvider, createTheme } from '@mui/material/styles';

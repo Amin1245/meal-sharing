@@ -2,44 +2,66 @@ import "dotenv/config";
 import express from "express";
 import cors from "cors";
 import bodyParser from "body-parser";
-import knex from "./database_client.js";
+import knex from "./database_client.js"; // Make sure database_client.js path is correct
+
 import mealsRouter from "./routers/meals.js";
 import reservationsRouter from "./routers/reservations.js";
 import reviewsRouter from "./routers/reviews.js";
 
 const app = express();
-app.use(cors());
+const port = process.env.PORT || 3001;
+
+const allowedOrigins = [
+  'http://localhost:3000',
+  'http://localhost:3001',
+  'https://meal-sharing-483d.onrender.com/', 
+];
+
+app.use(cors({
+  origin: function (origin, callback) {
+    if (!origin) return callback(null, true);
+    if (allowedOrigins.indexOf(origin) === -1) {
+      const msg = 'The CORS policy for this site does not allow access from the specified Origin.';
+      return callback(new Error(msg), false);
+    }
+    return callback(null, true);
+  },
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH'],
+  allowedHeaders: ['Content-Type', 'Authorization'],
+  credentials: true,
+}));
+
 app.use(bodyParser.json());
 
-// Special routes (future/past/first/last meals)
-app.get("/api/future-meals", async (req, res) => {
+// Special routes (from your original code)
+app.get("/api/future-meals", async (req, res, next) => {
   try {
     const meals = await knex.raw("SELECT * FROM meal WHERE `when` > NOW()");
     res.json(meals[0]);
   } catch (err) {
-    res.status(500).json({ error: "Error fetching future meals" });
+    next(err); // Pass error to middleware
   }
 });
 
-app.get("/api/past-meals", async (req, res) => {
+app.get("/api/past-meals", async (req, res, next) => {
   try {
     const meals = await knex.raw("SELECT * FROM meal WHERE `when` < NOW()");
     res.json(meals[0]);
   } catch (err) {
-    res.status(500).json({ error: "Error fetching past meals" });
+    next(err); // Pass error to middleware
   }
 });
 
-app.get("/api/all-meals", async (req, res) => {
+app.get("/api/all-meals", async (req, res, next) => {
   try {
     const meals = await knex.raw("SELECT * FROM meal ORDER BY id");
     res.json(meals[0]);
   } catch (err) {
-    res.status(500).json({ error: "Error fetching all meals" });
+    next(err); // Pass error to middleware
   }
 });
 
-app.get("/api/first-meal", async (req, res) => {
+app.get("/api/first-meal", async (req, res, next) => {
   try {
     const meals = await knex.raw("SELECT * FROM meal ORDER BY id ASC LIMIT 1");
     if (meals[0].length === 0) {
@@ -47,11 +69,11 @@ app.get("/api/first-meal", async (req, res) => {
     }
     res.json(meals[0][0]);
   } catch (err) {
-    res.status(500).json({ error: "Error fetching first meal" });
+    next(err); // Pass error to middleware
   }
 });
 
-app.get("/api/last-meal", async (req, res) => {
+app.get("/api/last-meal", async (req, res, next) => {
   try {
     const meals = await knex.raw("SELECT * FROM meal ORDER BY id DESC LIMIT 1");
     if (meals[0].length === 0) {
@@ -59,16 +81,29 @@ app.get("/api/last-meal", async (req, res) => {
     }
     res.json(meals[0][0]);
   } catch (err) {
-    res.status(500).json({ error: "Error fetching last meal" });
+    next(err); // Pass error to middleware
   }
 });
 
-//  Mount routers
+// Basic route for the root path
+app.get('/', (req, res) => {
+  res.send('Welcome to the Meal Sharing API!');
+});
+
+// Mount routers
 app.use("/api/meals", mealsRouter);
 app.use("/api/reservations", reservationsRouter);
 app.use("/api/reviews", reviewsRouter);
 
-// Start server
-app.listen(process.env.PORT, () => {
-  console.log(`API listening on port ${process.env.PORT}`);
+// Error handling middleware (should be the last app.use)
+app.use((err, req, res, next) => {
+  console.error("Caught unhandled error:", err);
+  if (res.headersSent) {
+    return next(err);
+  }
+  res.status(500).json({ error: "An unexpected error occurred." });
+});
+
+app.listen(port, () => {
+  console.log(`API listening on port ${port}`);
 });
