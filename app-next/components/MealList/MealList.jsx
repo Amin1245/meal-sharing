@@ -12,6 +12,7 @@ const MealsList = () => {
   const [sortDir, setSortDir] = useState("asc");
   const [showAvailableOnly, setShowAvailableOnly] = useState(false);
 
+  
   const localMealImages = [
     '/images/1.jpg',
     '/images/2.jpg',
@@ -37,13 +38,19 @@ const MealsList = () => {
           url += `availableReservations=true&`;
         }
         
-        url = url.slice(0, -1); 
+        url = url.endsWith('?') ? url.slice(0, -1) : url.slice(0, -1); 
+        if (url.endsWith('&')) { 
+            url = url.slice(0, -1);
+        }
 
         const res = await fetch(url);
         const data = await res.json();
-        const mealsWithImages = data.map((meal, index) => ({
+
+
+        const mealsWithImages = data.map((meal) => ({
           ...meal,
-          image_url: localMealImages[index % localMealImages.length] || '/images/meal-placeholder.jpg'
+         
+          image_url: meal.image_url || localMealImages[(meal.id - 1) % localMealImages.length] || '/images/meal-placeholder.jpg'
         }));
         setMeals(mealsWithImages);
       } catch (err) {
