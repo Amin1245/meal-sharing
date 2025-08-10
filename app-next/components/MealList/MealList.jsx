@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react";
 import Meal from "../Meal/Meal";
 import styles from "./MealList.module.css";
 
-const API_BASE_URL = process.env.NEXT_PUBLIC_BACKEND_API_URL;
+const API_BASE_URL = process.env.NEXT_PUBLIC_BACKEND_API_URL || "http://localhost:3001/api";
 
 const MealsList = () => {
   const [meals, setMeals] = useState([]);
