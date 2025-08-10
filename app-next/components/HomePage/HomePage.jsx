@@ -3,7 +3,7 @@ import { useState, useEffect } from "react";
 import styles from "./HomePage.module.css";
 import Link from "next/link";
 
-const API_BASE_URL = process.env.NEXT_PUBLIC_BACKEND_API_URL;
+const API_BASE_URL = process.env.NEXT_PUBLIC_BACKEND_API_URL || "http://localhost:3001/api";
 
 const HomePage = () => {
   const [meals, setMeals] = useState([]);
